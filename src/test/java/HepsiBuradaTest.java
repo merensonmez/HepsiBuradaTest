@@ -45,9 +45,15 @@ public class HepsiBuradaTest {
         WebElement offeringPrice = driver.findElement(By.cssSelector("#offering-price"));
         String price = offeringPrice.getText();
         System.out.println("Price: " + price);
+        Thread.sleep(1000);
 
         WebElement comments = driver.findElement(By.xpath("//div[@id=\"comments-container\"]"));
         comments.click();
+        Thread.sleep(1000);
+
+        WebElement allRate = driver.findElement(By.cssSelector(".hermes-AverageRateBox-module-g3di4HmmxfHjT7Q81WvH"));
+        String rate = allRate.getText();
+        System.out.println("Rate : " +rate);
 
 
 
