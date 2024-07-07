@@ -1,23 +1,28 @@
+import com.github.javafaker.Faker;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Driver;
 import java.time.Duration;
 import java.util.ArrayList;
 
 public class HepsiBuradaTest {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         WebDriverManager.chromedriver().setup();
         ChromeDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        Faker faker = new Faker();
+        String fakeEmail = faker.internet().emailAddress();
 
         driver.get("https://www.hepsiburada.com/");
 
@@ -45,17 +50,38 @@ public class HepsiBuradaTest {
         WebElement offeringPrice = driver.findElement(By.cssSelector("#offering-price"));
         String price = offeringPrice.getText();
         System.out.println("Price: " + price);
-        Thread.sleep(1000);
+
 
         WebElement comments = driver.findElement(By.xpath("//div[@id=\"comments-container\"]"));
         comments.click();
         Thread.sleep(1000);
 
-        WebElement allRate = driver.findElement(By.cssSelector(".hermes-AverageRateBox-module-g3di4HmmxfHjT7Q81WvH"));
-        String rate = allRate.getText();
-        System.out.println("Rate : " +rate);
+        WebElement addToCart = driver.findElement(By.xpath("//span[normalize-space()=\"Sepete ekle\"]"));
+        addToCart.click();
+        Thread.sleep(1000);
 
+        WebElement shoppingCart = driver.findElement(By.xpath("//a[normalize-space()=\"Sepete git\"]"));
+        shoppingCart.click();
+        Thread.sleep(2000);
 
+        WebElement continueShopping = driver.findElement(By.cssSelector("#continue_step_btn"));
+        continueShopping.click();
+        Thread.sleep(2000);
+
+        WebElement continueWithoutRegister = driver.findElement(By.cssSelector("._1mCdWR7afWBEU4zMRu13zb"));
+        continueWithoutRegister.click();
+        Thread.sleep(2000);
+
+        WebElement email = driver.findElement(By.cssSelector("#txtEmail"));
+        email.sendKeys(fakeEmail);
+        Thread.sleep(2000);
+
+        WebElement continueWithEmail = driver.findElement(By.cssSelector("#btnWithoutMemberShip"));
+        continueWithEmail.click();
+        Thread.sleep(4000);
+
+        File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(screenshotFile,new File("CheckoutPage.png"));
 
     }
 }
