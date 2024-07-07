@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.sql.Driver;
 import java.time.Duration;
+import java.util.ArrayList;
 
 public class HepsiBuradaTest {
     public static void main(String[] args) throws InterruptedException {
@@ -33,7 +34,20 @@ public class HepsiBuradaTest {
         WebElement iphone13 = driver.findElement(By.xpath("//h3[normalize-space()=\"iPhone 13 128 GB\"]"));
         Actions actions = new Actions(driver);
         actions.moveToElement(iphone13).click().build().perform();
+
+        ArrayList <String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        Thread.sleep(1000);
+        WebElement color = driver.findElement(By.cssSelector("label[for=\"Renk4\"]"));
+        color.click();
         Thread.sleep(2000);
+
+        WebElement offeringPrice = driver.findElement(By.cssSelector("#offering-price"));
+        String price = offeringPrice.getText();
+        System.out.println("Price: " + price);
+
+        WebElement comments = driver.findElement(By.xpath("//div[@id=\"comments-container\"]"));
+        comments.click();
 
 
 
